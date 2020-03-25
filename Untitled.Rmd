@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## package
+# package
 
 ```{r}
 library(googlesheets4)
@@ -17,7 +17,7 @@ library(dplyr)
 library(lubridate)
 ```
 
-## Create object
+# Create object
 
 ```{r}
 a <- 2
@@ -30,9 +30,9 @@ a
 
 ## name rule
 
-###A valid variable name consists of:letters, numbers and the dot (.) or underline (_) characters.
+### A valid variable name consists of:letters, numbers and the dot (.) or underline (_) characters.
 
-###A variable name starts with:a letter;or the dot not followed by a number.
+### A variable name starts with:a letter;or the dot not followed by a number.
 ```{r}
 my_108_total_credits <- 15
 _108_total_credits <- 15
@@ -51,6 +51,8 @@ my.108.total_credits <- 15
 
 `我的年紀`-> my_age
 ```
+
+## After Class Practice
 
 ```{r}
 `我的年紀`<-20
@@ -75,9 +77,79 @@ my_age<-我的年紀
 
 ```
 
+### (2) 物件名稱只能用反頓點 ` , 不能用單引號 ' ; (3) 物件名稱只能用反頓點 ` , 不能用雙引號 " ; (4) 箭頭指向處只能放物件名稱，不能放「值」，如第二行的20是個「值」。; 物件名稱只能用反頓點 ` , 不能用單引號 '
+### (5) 「我的年紀」在有些電腦可以，有些不行，建議避免; 改成「`我的年紀`」
+
 ```{r}
 library(readr)
 A02_company_all_public <- read_csv("https://www.dropbox.com/s/rtz2a9na62n3a8l/A02_company_all_public.csv?dl=1")
 A02_company_all_public$`候選人` -> candidate
+```
+
+# Atomic Vector
+
+```{r}
+num1 <- 5
+vNum1 <- c(2,5)
+vNum2 <- c(2, num1)
+```
+
+```{r}
+vNum1 <- c(-1,5)
+vNum2 <- c(2,3)
+vNum3 <- c(vNum1,vNum2)
+vNum4 <- c(-1,5,2,3)
+vNum5 <- c(c(-1,5),c(2,3))
+```
+
+### vNum5 <- c(c(-1,5),c(2,3)) = vNum5 <- c(-1,5,2,3)
+
+## experiment
+
+```{r}
+vNum1 <- c(-1,5)
+vNum2 <- c(2,3)
+vNum4 <- c() # 空向量
+```
+
+```{r}
+vNum3 <- c(vNum2, vNum1)
+vNum4 <- c(vNum4, vNum1) # 向量疊代 （recursive vector concatenate）
+```
+
+# Different types(Numeric)
+
+```{r}
+num1<-5 # 非整數
+num2<-5L # 整數
+
+num1Vector<-c(5,6,7)
+num2Vector<-c(5L,6L,7L)
+```
+
+```{r}
+typeof(num1Vector)
+typeof(num2Vector)
+```
+
+
+# Character
+
+```{r}
+char1<-"你好"
+char2<-'你好'
+```
+
+```{r}
+HeSaid <- '他說："今天"'
+
+```
+
+```{r}
+library(httr)
+library(dplyr)
+GET("https://api.github.com/repos/21790EC/108-2-56-inclass-practice/commits") %>%
+  content() %>%
+  View()
 ```
 
