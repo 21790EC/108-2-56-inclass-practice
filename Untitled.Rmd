@@ -88,6 +88,9 @@ A02_company_all_public$`候選人` -> candidate
 
 # Atomic Vector
 
+
+
+
 ```{r}
 num1 <- 5
 vNum1 <- c(2,5)
@@ -102,7 +105,7 @@ vNum4 <- c(-1,5,2,3)
 vNum5 <- c(c(-1,5),c(2,3))
 ```
 
-### vNum5 <- c(c(-1,5),c(2,3)) = vNum5 <- c(-1,5,2,3)
+vNum5 <- c(c(-1,5),c(2,3)) = vNum5 <- c(-1,5,2,3)
 
 ## experiment
 
@@ -117,7 +120,7 @@ vNum3 <- c(vNum2, vNum1)
 vNum4 <- c(vNum4, vNum1) # 向量疊代 （recursive vector concatenate）
 ```
 
-# Different types(Numeric)
+## Different types(Numeric)
 
 ```{r}
 num1<-5 # 非整數
@@ -133,7 +136,7 @@ typeof(num2Vector)
 ```
 
 
-# Character
+## Character
 
 ```{r}
 char1<-"你好"
@@ -156,7 +159,7 @@ GET("https://api.github.com/repos/21790EC/108-2-56-inclass-practice/commits") %>
   View()
 ```
 
-## Practice
+### Practice
 
 ```{r}
 library(googlesheets4)
@@ -165,10 +168,90 @@ ss <- as_sheets_id(`出席狀況表單網址`)
 homework_sheet <- sheets_read(ss,sheet=1)
 ```
 
-# Logics
+## Logics
 
 ```{r}
 logi1 <- c(T,TRUE,F,FALSE,FALSE)
+
+# 加總向量內的所有元素值。
+sum(logi1)
+```
+
+## typeof()
+顯示atomic vector元素的基本認定型態，它代表電腦記憶體在儲存時真正看待的型態。
+
+```{r}
+num <- c(1.5, 2, 3)
+int <- c(1L, 3L, -2L)
+char <- c("1.5","2","3")
+logi <- c(T,T,F)
+
+typeof(num)
+typeof(int)
+typeof(char)
+typeof(logi)
+```
+
+## class()
+依資料的螢幕顯示型態及能對它進行的操作所做的分類。
+
+```{r}
+class(num)
+class(int)
+class(char)
+class(logi)
+```
+
+###另
+```{r}
+library(readr)
+hello <- read_csv("https://www.dropbox.com/s/j5h23wqrlnuqkai/hello.csv?dl=1")
+a <- "a"
+`是在` <- c("哈樓","?")
+number <- 0
+numbers <- c(1:3,5)
+fun <- function(){}
+logic <- c(1==2,1!=1,1<=2)
+```
+```{r}
+
+typeof(hello)
+class(hello)
+mode(hello)
+
+typeof(是在)
+class(是在)
+mode(是在)
+
+typeof(number)
+class(number)
+mode(number)
+
+typeof(numbers)
+class(numbers)
+mode(numbers)
+
+typeof(fun)
+class(fun)
+mode(fun)
+
+typeof(logic)
+class(logic)
+mode(logic)
+
+```
+
+
+
+# Atomic Vector Extended
+
+##factor: 類別資料
+當資料值只有固定幾類反覆出現時，此類資料稱之為類別資料（factor or categorical data）
+
+```{r}
+factor(
+  字串向量
+)
 ```
 
 ```{r}
@@ -191,6 +274,273 @@ class(majors10_factor)
 ```
 
 ```{r}
+as.integer(majors10_factor)  #將資料的class轉成integer。由於factor被轉成integer後，其螢幕顯示會顯示電腦是用什麼數字在存這些類別資料。
+
+levels(majors10_factor)
+#數字與類別文字的對照表mapping table:
+```
+
+
+## POSIXct/POSIXt: 時間資料。
+
+```{r}
+ymd_hms(
+  字串向量
+)
+```
+
+## Class Version
+
+```{r}
+stringInteger <- c("1","2","-11")
+class(stringInteger) # 無法進行數值運算
+stringInteger+2
+```
+
+```{r}
+trueInteger <- as.integer(stringInteger)
+class(trueInteger) # 可以進行數值運算
+typeof(trueInteger)
+trueInteger+2
+```
+
+```{r}
+char3 <- c("小明","1","3")
+as.integer(char3)
+```
+
+R的函數均不會主動更改輸入物件，只會把結果值另行輸出，所以若要保留轉換結果則必需指定到一個物件名稱上。
+
+```{r}
+as.integer(stringInteger)
+class(stringInteger)
+```
+
+```{r}
+stringInteger <- as.integer(stringInteger)
+class(stringInteger)
+```
+
+```{r}
+studentId <- c(410773002, 410773015)
+studentId <- as.character(studentId)
+class(studentId)
+```
+
+```{r}
+char1<-"你好"
+char2<-'你好'
+char1Vector<-c("你好","How are you?")
+
+typeof(char1)
+class(char1)
+
+typeof(char2)
+class(char2)
+
+typeof(char1Vector)
+class(char1Vector)
+```
+
+```{r}
+dialogue <- c('小明說："明天不用上課。"',
+               '小花說："真的嗎？"')
+
+cat(dialogue, sep="\n")
+```
+
+```{r}
+library(httr)
+library(dplyr)
+GET("https://api.github.com/repos/tpemartin/108-2-56-inclass-practice/commits") %>%
+  content() %>%
+  View()
+```
+
+### 查詢函數用法：
+
+Script window: 游標放在函數名稱任何一個位置，按F1。
+Console window: ?函數名稱 按enter。
+右下角Help tab的放大鏡打函數名稱。
+
+## Date/Time
+
+```{r}
+library(lubridate)
+```
+
+台北 2020-03-18 13:52:40
+葡萄牙 Mar.18, 2020, 05:52:40
+
+```{r}
+tpeDateTime <- ymd_hms("2020-03-18 13:52:40",
+                   tz="Asia/Taipei")
+tpeDateTime
+class(tpeDateTime)
+typeof(tpeDateTime)
+```
+
+```{r}
+pgDateTime <- mdy_hms("Mar.18, 2020, 05:52:40",
+                  tz="Europe/Lisbon")
+pgDateTime
+class(pgDateTime)
+typeof(pgDateTime)
+```
+
+```{r}
+as.double(tpeDateTime)
+as.double(pgDateTime)
+```
+
+```{r}
+with_tz(tpeDateTime, tzone="UTC")
+with_tz(pgDateTime, tzone="UTC")
+```
+
+小心以下兩函數的input中一個是tz，一個是tzone
+
+ymd_hms(..., tz="Asia/Taipei")
+with_tz(..., tzone="Asia/Taipei")
+
+```{r}
+ymd_hms("2020-03-18T13:52:40Z",
+                   tz="Asia/Taipei")
+#T/Z讓時間強制變成UTC，就不需要tz＝，要不然會自動改時區
+```
+
+
+較好的寫法:
+
+```{r}
+utcTime <- ymd_hms("2020-03-18T13:52:40Z")
+
+with_tz( utcTime, tzone="Asia/Taipei")
+```
+
+or
+
+```{r}
+with_tz( ymd_hms("2020-03-18T13:52:40Z"), tzone="Asia/Taipei")
+```
+
+Practice:
+```{r}
+studentTime <- c( ymd_hms("2020-03-04T06:56:29Z"),
+                  ymd_hms("2020-03-11 14:16:43",tz="Asia/Taipei"), 
+                  ymd_hms("2020-03-11 14:34:33",tz="Asia/Taipei")
+                  )
+studentTime
+```
+
+#List
+
+##每個元素值可以是不同type的物件值
+
+```{r}
+#Vector 用引號讓每個物件變成字串
+c("2020-03-31T13:40:55Z",
+  "一芳",
+  "2",
+  "水果茶")
+
+#List
+library(lubridate)
+`小明交易1` <- list(
+  ymd_hms("2020-03-31T13:40:55Z"), # Date/Time class
+  "一芳", # character
+  2, # numeric
+  "水果茶" # character
+)
+print(`小明交易1`)
 
 ```
+
+
+##物件值可以是vector形式，也可以list。
+
+###差別只差在記憶體占用量 用vector(向量)會占用較多記憶體
+
+```{r}
+# list含兩個vectors
+`小明108學年課表A` <- list(
+  c("108-1","高級會計學","高等統計學"),
+  c("108-2","食在拉丁美洲")
+)
+print(`小明108學年課表A`)
+```
+
+```{r}
+# list含兩個lists
+`小明108學年課表B` <- list(
+  list("108-1","高級會計學","高等統計學"),
+  list("108-2","食在拉丁美洲")
+)
+print(`小明108學年課表B`)
+```
+
+```{r}
+# list含兩個lists, 子層list又各含兩個vectors
+`小明108學年課表C` <- list(
+  list(
+    c("108-1"), # 可只寫 "108-1"
+    c("高級會計學","高等統計學")
+       ),
+  list(
+    c("108-2"),
+    c("食在拉丁美洲")
+  )
+)
+print(`小明108學年課表C`)
+```
+
+##物件值可以取名
+
+```{r}
+# list含兩個lists, 子層list又各含兩個vectors
+`小明108學年課表C` <- list(
+  `108學年第1學期`=list(
+    c("108-1"), # 可只寫 "108-1"
+    c("高級會計學","高等統計學")
+       ),
+  `108學年第2學期`=list(
+    c("108-2"),
+    c("食在拉丁美洲")
+  )
+)
+print(`小明108學年課表C`)
+```
+
+我們的程式要在網路送出commit資訊時，可以透過以下程序將list轉成JSON：
+```{r}
+library(jsonlite) # 不少同學這行會有Error，還記得如何排除嗎？
+toJSON(commit)
+```
+
+
+#物件儲存
+
+存下Global Environment中有的物件：
+
+```{r}
+# save(object1, object2, ..., file="myData.Rda")
+```
+
+下次取回來Global Environment用：
+
+```{r}
+# load("myData.Rda")
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
