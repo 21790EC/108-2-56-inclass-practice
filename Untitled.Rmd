@@ -1121,6 +1121,8 @@ str(transcript100to103)
 ```
 
 分析情境：
+
+table 分類並計算同一筆類別裡有多少資料
 ```{r}
 # 各學屆2年級人數
 table(transcript100to103$學屆)
@@ -1397,6 +1399,91 @@ a==NA
 is.na(a)
 ```
 
+example裡誰沒有體重資料
+```{r}
+print(example[c("name","weight")])
+
+pick_na <- is.na(example$weight)
+example$name[pick_na]
+```
+
+R還有一種特別的缺失資料NaN (即not a number)，出現在沒有定義的數學運算上，如：
+```{r}
+0/0 #不會出現在字串值
+```
+
+```{r}
+list_victimAges_female$數目 <- as.integer(list_victimAges_female$數目)
+```
+創立 可選出缺失資料的「要/不要」向量pick_na, 並計算有多少筆缺失。 
+anser
+```{r}
+pick_na <- is.na(list_victimAges_female$數目)
+total_na <- sum(pick_na) #logical中: true為1，false為0
+print(total_na)
+```
+
+
+## 字元偵測
+
+  stringr::str_detect()
+  
+example裡誰喜歡美食
+```{r}
+print(example[c("name","hobby")])
+
+pick_loveFood <- stringr::str_detect(example$hobby,"美食")
+example$name[pick_loveFood]
+```
+
+常有同學會有以下錯誤寫法:
+```{r}
+pick_loveFood <- example$hobby == "美食"
+pick_loveFood
+```
+新增一個假設的hobby2:
+```{r}
+example[["hobby2"]] <- c("美食", "時尚", "美食", "旅遊")
+
+print(example[c("name", "hobby2")])
+pick_loveFood2 <- example$hobby2 == "美食"
+example$name[pick_loveFood2]
+```
+  a. == 字串內容一模一樣。
+  b. str_detect 字串內容有關鍵字。
+
+以下資料為新北市垃圾車路線
+```{r}
+jsonlite::fromJSON("https://data.ntpc.gov.tw/od/data/api/EDC3AD26-8AE7-4916-A00B-BC6048D19BF8?$format=json") ->
+  garbageRoutes
+```
+
+```{r}
+#  1 用typeof()函數查詢電腦實質上如何看待garbageRoutes。
+typeof(garbageRoutes)  
+#  2 用class()函數查詢電腦把它能進行的操作運算歸屬於哪一類型。
+class(garbageRoutes)
+
+```
+由於garbageRoutes的本質是list，所以我們可以使用list所有操作手法，而class為data frame表示它有比典型list的運作多了些工具與變化（後面章節會提）。
+
+```{r}
+# 由linename元素判斷垃圾車有幾條路線。
+factor(garbageRoutes$linename) -> garbageRoutes$linename
+levels(garbageRoutes$linename)
+  
+# 由linename創造： 可篩選出下午路線的「要/不要」向量pick_afternoonRoutes。
+pick_afternoonRoutes <-
+  stringr::str_detect(
+    garbageRoutes$linename,
+    "下午"
+  )
+garbageRoutes$linename[pick_afternoonRoutes]
+```
+
+
+
+
 ```{r}
 
 ```
@@ -1425,6 +1512,13 @@ is.na(a)
 
 ```
 
+```{r}
+
+```
+
+```{r}
+
+```
 
 ```{r}
 
@@ -1434,8 +1528,21 @@ is.na(a)
 
 ```
 
+```{r}
 
+```
 
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
 
 
 
