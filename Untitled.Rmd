@@ -1930,12 +1930,44 @@ covid19$縣市 <-
 levels(covid19$縣市)
 ```
 
+## levels改名
+
+  levels(x) <- 
 
 
+在R裡，若你看到函數f說明在Usage同時寫上f() <-的用法時，它表示此函數除了一般用來產生結果以外，也可以用來設定結果。
+
+  levels: 一般用來顯示類別
+
+  levels <- : 用來設定類別
+
+其他常用到設定用法的還有names(),attr()等等
+
+```{r}
+factor1 <- factor(
+  c("A","A","C","A","D","F","D","D")
+)
+factor1
+
+levels(factor1) <- c("優","佳","尚可","普")
+
+factor1
+```
+
+也可改levels其中幾個利用元素取代概念
+```{r}
+levels(factor1)[[1]] <- "Excellent"
+levels(factor1)[c(3,4)] <- c("C","D")
+factor1
+```
+由於factor內容的呈現是依循levels對照表走，所以levels內容一變，factor的內容呈現也變了。
 
 
+## levels整併
 
+  原本levels是台灣各縣市，你想改成北/中/南/東部四類。
 
+  原本年齡層levels是每5歲一個間距，你想改成10歲一個間距。
 
 
 
