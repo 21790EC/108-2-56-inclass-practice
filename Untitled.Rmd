@@ -1776,6 +1776,194 @@ str_view(phrase, pattern)
 
 
 
+## 前後鄰居描述Look around:
+
+  target後面是B：target_regex(?=B_regex)： target_pattern後面是年
+
+  target前面是A：(?<=A_regex)target_regex：target_pattern前面是民國
+
+  target前有A後有B：(?<=A_regex)target_regex(?=B_regex)
+
+Cheat sheet上還有更多字串處理情境。
+```{r}
+twDate <-  c("民國108年12月5日","民國98年10月5日")
+
+library(stringr)
+# 準備regex: 
+## 取出：「前有」民國，「後有」年的「數字」「們」
+## "(?<={A_regex}){target_regex}(?={B_regex})"
+
+target_regex <- "[0-9]+"
+A_regex <- "民國"
+B_regex <- "年"
+
+regex_pattern <- glue::glue(
+  "(?<={A_regex}){target_regex}(?={B_regex})"
+  )
+
+print(regex_pattern)
+
+## 如果同學已經很熟就可以直接寫
+regex_pattern <-
+  "(?<=民國)[0-9]+(?=年)"
+
+# 取出民國年，計算西元年
+year <- 
+  str_extract(
+    twDate,
+    regex_pattern)
+westernYear <- as.integer(year)+1911
+
+# 替換民國xx年的xx成西元年數字
+str_replace(
+  twDate,
+  regex_pattern,  # 要換掉的文字
+  as.character(westernYear) # 要替換的內容
+) -> twDate_reformat
+print(twDate_reformat)
+
+
+lubridate::ymd(twDate_reformat)
+```
+
+
+## 字元模版
+
+[:graph:] 包山包海，還包中文字元。
+
+[\u4E00-\u9FFF] 代表所有中日韓文字字元。
+
+```{r}
+str_extract_all(
+  "我的名字8293叫17380小abce明",
+  "[\u4E00-\u9FFF]+")
+```
+
+
+# On factor class
+
+內定levels順序是根據電腦內字元排序（collating sequence）依辭典序列方式決定排序，很多時候沒有意義。
+```{r}
+char1 <- c("Wild","Apple","Donald","May","Avocada") 
+factor1 <- factor(char1)
+levels(factor1)
+```
+
+```{r}
+char2 <- c("蔡英文","習近平","Donald Trump","蔡頭") 
+factor2 <- factor(char2)
+levels(factor2)
+
+sort(
+  str_sub(char2,1,1)
+)
+sort(
+  str_sub(char2,2,2)
+)
+```
+
+```{r}
+Sys.getlocale("LC_COLLATE")
+```
+
+
+## levels重新排列
+
+重新再定義factor一次
+
+factor(目前的factor向量, levels=自訂排序)
+
+  levels放第二格時， levels= 可省略。
+
+  目前的類別向量的可不可排序性質依然會保留，不用特意去設ordered=T/F
+  
+使用函數時，若argument input的位置就是原help說明裡定義該argument位置時，「argument_name =」部份可以不寫。
+
+手動輸入排法：由女男改男女
+```{r}
+levels(covid19$性別)
+covid19$性別 <- factor(covid19$性別, c("男","女"))
+```
+
+
+依與levels相關的其他數據排列：
+
+covid19$縣市的levels依其人口由大排到小。如“新北市”人口最多，它就要排levels的第一個，依此類推。
+
+
+資料科學心法一：拿到新的資料先檢視「內容」、「class/type」
+```{r}
+print(population)
+class(population) # 判斷出是named integer vector
+names(population) # 元素名稱是台灣各縣市
+```
+
+2. 留下levels中有的popluation元素
+```{r}
+levels(covid19$縣市) # 是名稱字串向量
+
+# 由於population元素值有names，可以用`[名稱字串向量]`取出所要的
+levels(covid19$縣市) -> levelsInData
+population[levelsInData] -> population
+```
+
+
+3. 將population由大排到小(sort(x, decreasing=T)可將x numeric vector由大排到小。)
+```{r}
+population <- sort(population, decreasing=T)
+population
+```
+
+4. 排完後population第一個元素值最大，它的名稱即是人口最多的縣市，第二元素值次大，它名稱是人口第二多縣市，依此類推。我們要的是population排完後的元素名稱。
+```{r}
+newLevels <- names(population)
+newLevels
+```
+
+5. 重設levels排序
+```{r}
+covid19$縣市 <-
+  factor(
+    covid19$縣市, levels=newLevels
+  )
+
+levels(covid19$縣市)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
