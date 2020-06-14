@@ -1971,18 +1971,68 @@ factor1
 
   原本年齡層levels是每5歲一個間距，你想改成10歲一個間距。
 
+## levels擴充
+
+levels <-右邊值的部份包含原本的外，還有想新增的類別
+
+# On list
+
+```{r}
+library(purrr)
+```
 
 
+## 每個元素相同運算
 
+在之前的example物件
+```{r}
+example <- list(name = c("小明", "小花", "小新", "美美"), height = c(175, 
+    166, 170, 160), weight = c(77, NA, 60, 43), birthday = lubridate::ymd(c("1998-03-11", 
+    "1999-12-22", "1995-08-22", "2001-10-10")), hobby = c("美食 旅遊", "旅遊 時尚", 
+    "3C 美食", "音樂 旅遊"), residence = c("Taipei", "New Taipei", "Taichung", 
+    "Kaohsiung"), allowance = factor(c("0-1000", "1001-2000", "2000+", "1001-2000")), 
+    bloodType = c("A", "B", "B", "O"))
+```
 
+我們有可能想要拿出其中屬於小新的資料：
+```{r}
+pick_小新 <- example$name == "小新"
+data_selected <- list(name = example$name[pick_小新], weight = example$weight[pick_小新], 
+    height = example$height[pick_小新], hobby = example$hobby[pick_小新], residence = example$residence[pick_小新], 
+    allowance = example$allowance[pick_小新], bloodType = example$bloodType[pick_小新])
+```
 
+data_selected的產生，相當於進行
 
+```{r}
+example[[1]][pick_小新]
+example[[2]][pick_小新]
+example[[3]][pick_小新]
+example[[4]][pick_小新]
+example[[5]][pick_小新]
+example[[6]][pick_小新]
+example[[7]][pick_小新]
+```
 
+再存放在list()裡。也就是我們想要：
 
+  對example底下的每個元素進行
 
+  [pick_小新]的動作
 
+purrr底下的map()允許我們
 
+  使用.x來代表每個元素，即[[1]], [[2]], ..., [[7]]
+  
+所以
 
+  對每個元素進行[pick_小新]
+
+  可以寫成.x[pick_小新]。
+
+由於.x[pick_小新]是個公式化的動作，在R，~代表要形成一個公式(formula)，所以
+
+  要寫成~ .x[pick_小新]
 
 
 
