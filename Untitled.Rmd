@@ -2162,11 +2162,22 @@ highestPerson <-
 
 ## 省略原則
 
+若代表中間物件的.在函數的「第一位」則.*可省略不寫，連它後面的,也去掉。小心若不在第一位則不可做省略.動作。
 
 
+```{r}
+levels(region) <- levels(region) %>% str_replace(., "台北", "北部") %>% str_replace(., 
+    "花蓮|台東", "東部") %>% str_replace(., "台中", "中部")
+```
+可改成
+
+```{r}
+levels(region) <- levels(region) %>% str_replace("台北", "北部") %>% str_replace("花蓮|台東", 
+    "東部") %>% str_replace("台中", "中部")
+```
 
 
-
+## 串接非單純函數程序
 
 
 
