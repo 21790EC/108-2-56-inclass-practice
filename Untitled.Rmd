@@ -2109,19 +2109,58 @@ z <- w %>% f(.) %>% g(.) %>% h(.)
 ```
 %>% 把左邊產生的output，接過去成為下一段函數的input
 
+## 元素粹取
+
+
+其實元素粹取符號$,[],[[]]也是函數, 要被取出元素的物件是第一個input，而取元素的位置資訊則是第二個input。
+
+Details
+example是第一個input，而name是第二個input。
 
 
 
+```{r}
+num <- c(2, 97, 22, 15, 7)
+
+# 選出大於50的數字
+pick_big <- (num > 50)
+num[pick_big]
+```
+
+```{r}
+(num > 50) %>% num[.]
+```
+
+## 執行順序
 
 
+R在面對pipe時會先把pipe走完最後才去做值assign給最後物件的動作，例如：
 
 
+```{r}
+highestPerson <- threeHeights %>% .sort(., decreasing = T) %>% names(.) %>% .[[1]]
+```
+pipe部份為
+
+Details
+```{r}
+.sort(threeHeigths, decreasing=T) %>%
+names(.) %>%
+.[[1]]
+```
+最後才去做值assign給最後物件的動作，（即->或<-最後進行），所以上面也可以使用左箭頭成為
+
+Details
+```{r}
+highestPerson <- 
+  threeHeights %>%
+  .sort(., decreasing=T) %>%
+  names(.) %>%
+  .[[1]]
+```
 
 
-
-
-
-
+## 省略原則
 
 
 
