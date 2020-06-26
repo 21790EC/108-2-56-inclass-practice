@@ -2181,6 +2181,8 @@ levels(region) <- levels(region) %>% str_replace("台北", "北部") %>% str_rep
 
 若遇到pipe 串接的下一段並不是單純的函數的話，可以用{}把此段內容括起來並把中間物件要放的位置換成.
 
+a
+
 
 
 
